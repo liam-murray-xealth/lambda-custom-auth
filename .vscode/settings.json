@@ -1,7 +1,4 @@
 {
-  "eslint.workingDirectories": [
-    "authClientCredentials",
-    "authXealth"
-  ],
-  "javascript.format.enable": false
+  "eslint.workingDirectories": ["authClientCredentials", "authXealth"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
