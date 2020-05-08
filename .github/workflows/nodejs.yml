@@ -28,4 +28,10 @@ jobs:
         make build 
         make lambda
       working-directory: authClientCredentials
+    - run: |
+        make lint
+        make utest
+        make build 
+        make lambda
+      working-directory: authXealth
 
