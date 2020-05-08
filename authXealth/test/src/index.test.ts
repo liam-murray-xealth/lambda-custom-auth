@@ -1,15 +1,9 @@
 import chai from 'chai'
-import path from 'path'
-import AWS from 'aws-sdk-mock'
-import { handler } from '../../src/index'
 
-// import Sinon from 'sinon'
-const expect = chai.expect
+//import { handler } from '../../src/index'
 
-describe('XealthAuth', function() {
-
-  it('should auth', async function() {
+describe('XealthAuth', function () {
+  it('should auth', async function () {
     // TOD
   })
-
 })

@@ -103,16 +103,10 @@ export function createStringToSignFormSignedRequestOpts(params: SignedRequestOpt
 }
 
 export function deriveSecret(apiKey: string, privateKey: string) {
-  return crypto
-    .createHmac('sha256', privateKey)
-    .update(apiKey)
-    .digest('base64')
+  return crypto.createHmac('sha256', privateKey).update(apiKey).digest('base64')
 }
 
 export function createHash(stringToSign: string, secret: string) {
   console.log(`Creating hash: ${stringToSign}`)
-  return crypto
-    .createHmac('sha256', secret)
-    .update(stringToSign)
-    .digest('base64')
+  return crypto.createHmac('sha256', secret).update(stringToSign).digest('base64')
 }

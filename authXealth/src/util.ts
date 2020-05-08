@@ -2,10 +2,7 @@ import env from 'env-var'
 import _get from 'lodash.get'
 
 export function envStr(key: string): string {
-  return env
-    .get(key)
-    .required()
-    .asString()
+  return env.get(key).required().asString()
 }
 
 export function getStr(ob: Object, key: string): string {
