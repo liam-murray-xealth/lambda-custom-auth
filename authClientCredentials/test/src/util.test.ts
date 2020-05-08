@@ -1,6 +1,6 @@
 import chai from 'chai'
 import 'mocha'
-import { envStr, getStr, getStrOpt } from '../../src/utils'
+import { envStr } from '../../src/utils'
 
 //import Sinon from 'sinon'
 const expect = chai.expect

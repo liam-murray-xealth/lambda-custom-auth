@@ -3,31 +3,31 @@ const allowedVerbs = ['GET', 'POST', 'PUT', 'PATCH', 'HEAD', 'DELETE', 'OPTIONS'
 export type HttpVerb = typeof allowedVerbs[number]
 
 export type Statement = {
-  Action: string,
-  Effect: string,
-  Resource: string[],
+  Action: string
+  Effect: string
+  Resource: string[]
   Condition?: string[]
 }
 
 type PolicyDoc = {
-  Version: string,
+  Version: string
   Statement: Statement[]
 }
 type Policy = {
-  principalId: string,
+  principalId: string
   policyDocument: PolicyDoc
 }
 
 export type Condition = any
 
 export type Method = {
-  resourceArn: string,
+  resourceArn: string
   conditions: Condition[]
 }
 
 export type AuthPolicyOptions = {
-  restApiId?: string,
-  region?: string,
+  restApiId?: string
+  region?: string
   stage?: string
 }
 

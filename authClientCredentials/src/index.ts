@@ -22,52 +22,6 @@ type vf = (token: string, secretOrPublicKey: Secret, options?: VerifyOptions) =>
 const verifyJwt = promisify(jwt.verify as vf)
 
 /**
- * Lambda entrypoint
- *
- * 1) API client gets bearer token, e.g.:
- *      POST https://YOUR_DOMAIN/oauth/token
- *      grant_type=client_credentials
- *      client_id=<id>
- *      client_secret=<secret>
- *      scope=<scope>
- *
- * 2) Cognito returns token as JWT signed with private key
- *
- * 3) API is called with token
- *
- *    Authorization: Bearer UAj2yiGAcMZGxfN2DhcUbl9v8WsR
- *
- * 4) This custom auth lambda is invoked
- *
- * See: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-input.html
- *
- * 5) We download and cache cognito public keys for verification of JWT
- *
- *
- */
-
-export async function handler(event: APIGatewayAuthorizerEvent) {
-  logger.info(`OAuth (event): ${JSON.stringify(event, null, 2)}`)
-
-  if (event.type != 'TOKEN') {
-    throw new Error(`Not supported: ${event.type}`)
-  }
-  const tokenEvent = event as APIGatewayTokenAuthorizerEvent
-
-  const pems = await getPemCache()
-
-  let resp
-  try {
-    resp = await getAllowPolicy(pems, tokenEvent)
-  } catch (err) {
-    console.log(`Failed to authenticate: ${err.toString()}`)
-    resp = getDenyPolicy(event.methodArn)
-  }
-  console.log(`Auth response  ${JSON.stringify(resp, null, 2)}`)
-  return resp
-}
-
-/**
  * Handles "Bearer token" or "token" in auth header
  */
 function getBearerToken(event: APIGatewayTokenAuthorizerEvent): string {
@@ -94,22 +48,22 @@ function getBearerToken(event: APIGatewayTokenAuthorizerEvent): string {
 
 // Partially filled out
 type CognitoBearerTokenPayload = {
-  username: string,
-  sub: string,
-  aud: string,
-  email_verified: boolean,
-  token_use: string,
-  auth_time: number,
-  iss: string,
-  exp: number,
+  username: string
+  sub: string
+  aud: string
+  email_verified: boolean
+  token_use: string
+  auth_time: number
+  iss: string
+  exp: number
   // Space separated
-  scope: string,
+  scope: string
   client_id: string
 }
 
 type tokenEvent = {
-  type: 'TOKEN',
-  methodArn: string,
+  type: 'TOKEN'
+  methodArn: string
   authorizationToken: string
 }
 
@@ -153,10 +107,10 @@ async function getVerifiedTokenPayload(pems, token: string): Promise<CognitoBear
 }
 
 export type ParsedMethodArn = {
-  restApiId: string,
-  stage: string,
-  verb: string,
-  path: string,
+  restApiId: string
+  stage: string
+  verb: string
+  path: string
   account: string
 }
 
@@ -223,4 +177,50 @@ async function getAllowPolicy(pems: PemCache, event: APIGatewayTokenAuthorizerEv
 
   // authResponse.usageIdentifierKey = payload["client_id"]
   return builder.build()
+}
+
+/**
+ * Lambda entrypoint
+ *
+ * 1) API client gets bearer token, e.g.:
+ *      POST https://YOUR_DOMAIN/oauth/token
+ *      grant_type=client_credentials
+ *      client_id=<id>
+ *      client_secret=<secret>
+ *      scope=<scope>
+ *
+ * 2) Cognito returns token as JWT signed with private key
+ *
+ * 3) API is called with token
+ *
+ *    Authorization: Bearer UAj2yiGAcMZGxfN2DhcUbl9v8WsR
+ *
+ * 4) This custom auth lambda is invoked
+ *
+ * See: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-input.html
+ *
+ * 5) We download and cache cognito public keys for verification of JWT
+ *
+ *
+ */
+
+export async function handler(event: APIGatewayAuthorizerEvent): Promise<any> {
+  logger.info(`OAuth (event): ${JSON.stringify(event, null, 2)}`)
+
+  if (event.type != 'TOKEN') {
+    throw new Error(`Not supported: ${event.type}`)
+  }
+  const tokenEvent = event as APIGatewayTokenAuthorizerEvent
+
+  const pems = await getPemCache()
+
+  let resp
+  try {
+    resp = await getAllowPolicy(pems, tokenEvent)
+  } catch (err) {
+    console.log(`Failed to authenticate: ${err.toString()}`)
+    resp = getDenyPolicy(event.methodArn)
+  }
+  console.log(`Auth response  ${JSON.stringify(resp, null, 2)}`)
+  return resp
 }

@@ -7,11 +7,11 @@ export type PemCache = {
 }
 
 export type CognitoJwk = {
-  alg: string,
-  e: string,
-  kid: string,
-  kty: 'RSA' | 'EC',
-  n: string,
+  alg: string
+  e: string
+  kid: string
+  kty: 'RSA' | 'EC'
+  n: string
   use: string
 }
 

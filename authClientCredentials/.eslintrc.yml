@@ -6,6 +6,10 @@ extends:
   - plugin:@typescript-eslint/recommended
   - prettier/@typescript-eslint
   - plugin:prettier/recommended
+ignorePatterns:
+  - node_modules/**
+  - dist/**
+  - lambda/**
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -16,20 +20,27 @@ parserOptions:
 root: true
 plugins:
   - '@typescript-eslint'
+  - prettier
 rules:
   quotes:
     - error
     - single
     - allowTemplateLiterals: true
       avoidEscape: true
+  '@typescript-eslint/no-unused-vars':
+    - warn
+    - vars: all
+      args: after-used
+      ignoreRestSiblings: true
+      argsIgnorePattern: ^_
   semi:
     - error
     - never
   '@typescript-eslint/member-delimiter-style':
     - error
     - multiline:
-        delimiter: comma
-        requireLast: false
+        delimiter: none
+        requireLast: true
       singleline:
         delimiter: comma
         requireLast: false
@@ -38,3 +49,10 @@ rules:
     - allowDestructuring: true
       allowedNames:
         - self
+  space-before-function-paren:
+    - error
+    - named: never
+      # Prettier wants space
+      anonymous: always
+      asyncArrow: never
+
