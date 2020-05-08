@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": "src",
+    "declaration": true,
+    "esModuleInterop": true,
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "typeRoots": ["./node_modules/@types"],
+    "noImplicitAny": false,
+    "outDir": "dist",
+    "paths": {
+      "~/*": ["*"]
+    },
+    // ttypescript
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ],
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2018"
+  },
+  //"include": ["src/**/*"]
+  // This makes dist/{src, test}
+  "include": ["src/**/*", "test/src/**/*", "test/_include.ts"]
+}

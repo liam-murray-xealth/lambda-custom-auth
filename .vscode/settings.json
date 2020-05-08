@@ -1,0 +1,7 @@
+{
+  "eslint.workingDirectories": [
+    "authClientCredentials",
+    "authXealth"
+  ],
+  "javascript.format.enable": false
+}
